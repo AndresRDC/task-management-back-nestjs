@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcryptjs';
+import { AccessTokenDto } from './dto/access-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
 
   async signIn(
     authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<AccessTokenDto> {
     const username = await this.validateUserPassword(authCredentialsDto);
     if (!username) {
       throw new UnauthorizedException('Verifique los datos ingresados');
