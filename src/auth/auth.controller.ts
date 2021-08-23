@@ -20,6 +20,8 @@ import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AccessTokenDto } from './dto/access-token.dto';
 import { UserIdDto } from './dto/user-id.dto';
+import { ErrorsDto } from '../dto/errors.dto';
+import { ErrorDto } from '../dto/error.dto';
 @ApiTags('auth')
 @Controller({
   version: '1',
@@ -36,10 +38,13 @@ export class AuthController {
     type: UserIdDto,
   })
   @ApiBadRequestResponse({
-    description:
-      'No se encuentran los parametros requeridos, o estos no son validos.',
+    description: 'Parametros no son validos.',
+    type: ErrorsDto,
   })
-  @ApiConflictResponse({ description: 'El nombre de usuario ya existe.' })
+  @ApiConflictResponse({
+    description: 'El nombre de usuario ya existe.',
+    type: ErrorDto,
+  })
   signUp(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<UserIdDto> {
@@ -53,11 +58,12 @@ export class AuthController {
     type: AccessTokenDto,
   })
   @ApiBadRequestResponse({
-    description:
-      'No se encuentran los parametros requeridos, o estos no son validos.',
+    description: 'Parametros no validos.',
+    type: ErrorsDto,
   })
   @ApiUnauthorizedResponse({
     description: 'Los datos ingresados no corresponde a un usuario.',
+    type: ErrorDto,
   })
   signIn(
     @Body(
