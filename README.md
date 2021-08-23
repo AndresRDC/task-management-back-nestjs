@@ -1,6 +1,6 @@
 # Gestor de tareas - backend 📝
 
-Backend de gestor de tareas con la finalidad realizar practica del frontend con React, haciendo uso NestJS (con Express) TypeScript, ORM TypeORM, base de datos PostgreSQL y documentación con Swagger. Puedes ver la documentación del [aquí](https://task-app-back.herokuapp.com/api/)
+Backend de gestor de tareas con la finalidad realizar practica del frontend con React, haciendo uso NestJS (con Express) TypeScript, ORM TypeORM, base de datos PostgreSQL y documentación con Swagger. Puedes ver la documentación [aquí](https://task-app-back.herokuapp.com/api/)
 
 Si te interesan las tecnologías utilizadas, puedes visitar este otro proyecto más avanzado de cual participe de forma colaborativa [Healthy-Dev backend](https://github.com/Healthy-Dev/healthy-back)
 
