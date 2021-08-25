@@ -10,6 +10,7 @@ import {
   ApiBody,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -32,6 +33,10 @@ export class AuthController {
     private readonly usersService: UsersService,
   ) {}
   @Post('auth/signup')
+  @ApiOperation({
+    summary: 'Registrar nuevo usuario',
+    description: 'Registra un nuevo usuario en el sistema',
+  })
   @ApiBody({ type: CreateUserDto })
   @ApiCreatedResponse({
     description: 'El usuario fue creado.',
@@ -52,6 +57,10 @@ export class AuthController {
   }
 
   @Post('auth/signin')
+  @ApiOperation({
+    summary: 'Acceder usuario',
+    description: 'Retorna un token de acceso al usuario autenticado',
+  })
   @ApiBody({ type: AuthCredentialsDto })
   @ApiCreatedResponse({
     description: 'El usuario ingreso.',

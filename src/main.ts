@@ -11,11 +11,19 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Task management')
-    .setDescription('The ToDo API description')
+    .setDescription(
+      'Esta es un simple gestor de tareas. Puedes registrar un usuario, \
+       autenticarte con un usuario y crear tareas, obtener todas tus tareas, \
+       con la posibilidad de filtrarlas por estado (status - OPEN/DONE) o un texto (search) que contenga \
+       el título o descripción de las mismas, obtener una tarea por id, cambiar el estado de una tarea \
+       y eliminar una tarea',
+    )
     .setVersion('1.0')
+    .addServer('v1')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('', app, document, {
     explorer: true,
     swaggerOptions: { filter: true, shwoRequestDuration: true },
   });

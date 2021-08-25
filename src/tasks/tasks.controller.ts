@@ -24,17 +24,18 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from '../users/user.entity';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { TaskDto } from './dto/tasks.dto';
 import { ErrorDto } from '../dto/error.dto';
 import { ErrorsDto } from '../dto/errors.dto';
-import { UnauthorizedErrorDto } from 'src/dto/unauthorized.error.dto';
 
 @ApiTags('tasks')
 @Controller({
@@ -46,6 +47,11 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get('tasks/:id')
+  @ApiOperation({
+    summary: 'Obtener tarea por id',
+    description: 'Retorna la tarea con el id indicado',
+  })
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Retorna la tarea.',
     type: TaskDto,
@@ -60,7 +66,7 @@ export class TasksController {
   })
   @ApiUnauthorizedResponse({
     description: 'Token de acceso no valido',
-    type: UnauthorizedErrorDto,
+    type: ErrorDto,
   })
   getTaskById(
     @Param('id', ParseIntPipe) id: number,
@@ -70,6 +76,11 @@ export class TasksController {
   }
 
   @Post('tasks')
+  @ApiOperation({
+    summary: 'Crear nueva tarea',
+    description: 'Registra una nueva tarea y la retorna',
+  })
+  @ApiBearerAuth()
   @ApiBody({ type: CreateTaskDto })
   @ApiCreatedResponse({
     description: 'Retorna tarea creada',
@@ -81,7 +92,7 @@ export class TasksController {
   })
   @ApiUnauthorizedResponse({
     description: 'Token de acceso no valido',
-    type: UnauthorizedErrorDto,
+    type: ErrorDto,
   })
   @UsePipes(ValidationPipe)
   createTask(
@@ -92,6 +103,11 @@ export class TasksController {
   }
 
   @Delete('tasks/:id')
+  @ApiOperation({
+    summary: 'Eliminar tarea',
+    description: 'Elimina la tarea con el id indicado',
+  })
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'La tarea fue eliminada.',
   })
@@ -105,13 +121,19 @@ export class TasksController {
   })
   @ApiUnauthorizedResponse({
     description: 'Token de acceso no valido',
-    type: UnauthorizedErrorDto,
+    type: ErrorDto,
   })
   deleteTaskById(@Param('id', ParseIntPipe) id: number, @GetUser() user: User) {
     return this.tasksService.deleteTaskById(id, user);
   }
 
   @Patch('tasks/:id/status')
+  @ApiOperation({
+    summary: 'Modificar estado tarea',
+    description:
+      'Actualiza el estado pasado como parametro de la tarea del id indicado',
+  })
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'El estado de la tarea fue modificado.',
     type: TaskDto,
@@ -126,7 +148,7 @@ export class TasksController {
   })
   @ApiUnauthorizedResponse({
     description: 'Token de acceso no valido',
-    type: UnauthorizedErrorDto,
+    type: ErrorDto,
   })
   updateStatusTask(
     @Param('id', ParseIntPipe) id: number,
@@ -137,6 +159,12 @@ export class TasksController {
   }
 
   @Get('tasks')
+  @ApiOperation({
+    summary: 'Obtener tareas',
+    description:
+      'Retorna todas las tareas con la posibilidad de indicarles filtros por estado (status) o si el titulo o descripción contiene un texto sumistrado (search)',
+  })
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Retorna las tareas.',
     type: [TaskDto],
@@ -147,7 +175,7 @@ export class TasksController {
   })
   @ApiUnauthorizedResponse({
     description: 'Token de acceso no valido',
-    type: UnauthorizedErrorDto,
+    type: ErrorDto,
   })
   getTasks(
     @Query(ValidationPipe) filterDto: GetTasksFilterDto,
