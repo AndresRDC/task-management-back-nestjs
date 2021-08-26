@@ -36,8 +36,10 @@ import {
 import { TaskDto } from './dto/tasks.dto';
 import { ErrorDto } from '../dto/error.dto';
 import { ErrorsDto } from '../dto/errors.dto';
+import { TaskStatusDto } from './dto/task-status.dto';
 
 @ApiTags('tasks')
+@ApiBearerAuth()
 @Controller({
   version: '1',
 })
@@ -51,7 +53,6 @@ export class TasksController {
     summary: 'Obtener tarea por id',
     description: 'Retorna la tarea con el id indicado',
   })
-  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Retorna la tarea.',
     type: TaskDto,
@@ -80,7 +81,6 @@ export class TasksController {
     summary: 'Crear nueva tarea',
     description: 'Registra una nueva tarea y la retorna',
   })
-  @ApiBearerAuth()
   @ApiBody({ type: CreateTaskDto })
   @ApiCreatedResponse({
     description: 'Retorna tarea creada',
@@ -107,7 +107,6 @@ export class TasksController {
     summary: 'Eliminar tarea',
     description: 'Elimina la tarea con el id indicado',
   })
-  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'La tarea fue eliminada.',
   })
@@ -133,7 +132,7 @@ export class TasksController {
     description:
       'Actualiza el estado pasado como parametro de la tarea del id indicado',
   })
-  @ApiBearerAuth()
+  @ApiBody({ type: TaskStatusDto })
   @ApiOkResponse({
     description: 'El estado de la tarea fue modificado.',
     type: TaskDto,
@@ -152,10 +151,10 @@ export class TasksController {
   })
   updateStatusTask(
     @Param('id', ParseIntPipe) id: number,
-    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+    @Body(ValidationPipe) taskStatusDto: TaskStatusDto,
     @GetUser() user: User,
   ): Promise<Task> {
-    return this.tasksService.updateStatusTask(id, status, user);
+    return this.tasksService.updateStatusTask(id, taskStatusDto, user);
   }
 
   @Get('tasks')
@@ -164,7 +163,6 @@ export class TasksController {
     description:
       'Retorna todas las tareas con la posibilidad de indicarles filtros por estado (status) o si el titulo o descripción contiene un texto sumistrado (search)',
   })
-  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Retorna las tareas.',
     type: [TaskDto],
